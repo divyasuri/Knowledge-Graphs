@@ -1,0 +1,21 @@
+PREFIX lmdb: <http://data.linkedmdb.org/movie/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?actorName ?directorName (COUNT(?filmName) as ?numberoffilms) WHERE
+{
+  ?f rdf:type lmdb:film ;
+     rdfs:label ?filmName ; 
+     lmdb:actor ?actorURI ; 
+     lmdb:director ?directorURI . 
+  ?actorURI rdf:type lmdb:actor ; 
+            lmdb:actor_name ?actorName .
+  ?directorURI rdf:type lmdb:director ; 
+               lmdb:director_name ?directorName .
+  FILTER (?directorName != ?actorName) . 
+}
+GROUPBY ?actorName ?directorName 
+HAVING (COUNT(?filmName) >20) 
+LIMIT 10 
+  
+  

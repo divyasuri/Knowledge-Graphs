@@ -1,0 +1,18 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX movie: <http://data.linkedmdb.org/resource/movie/>
+PREFIX mo: <http://purl.org/ontology/mo/>
+PREFIX lmdb: <http://data.linkedmdb.org/movie/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?actorName (group_concat(?filmName;separator=" , ") as ?filmNames) WHERE {
+  ?s rdf:type lmdb:actor ;
+     lmdb:actor_actorid ?id ; 
+  	 lmdb:actor_name ?actorName . 
+  ?r rdf:type lmdb:film ; 
+     rdfs:label ?filmName ; 
+     lmdb:actor ?s . 
+  FILTER(STRSTARTS(?actorName, "B"))
+}
+GROUPBY ?actorName
+LIMIT 10 
+  

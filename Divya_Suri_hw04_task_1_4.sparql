@@ -1,0 +1,22 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX lmdb: <http://data.linkedmdb.org/movie/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX  xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+SELECT DISTINCT ?countryName (COUNT(?film) as ?numberofDramaFilms) ?population WHERE 
+{
+  ?s rdf:type lmdb:film ; 
+     rdfs:label ?film ; 
+     lmdb:genre ?genre ; 
+     lmdb:country ?country . 
+  ?genre rdf:type lmdb:film_genre ; 
+         lmdb:film_genre_name "Drama". 
+  ?country rdf:type lmdb:country ; 
+           lmdb:country_name ?countryName ; 
+           lmdb:country_population ?_population . 
+  bind(xsd:integer(?_population) as ?population1 )
+  bind(?population1/100000 AS ?population)
+}
+GROUPBY ?countryName ?population
+ORDER BY DESC(?numberofDramaFilms)
+LIMIT 10 

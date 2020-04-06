@@ -1,0 +1,17 @@
+SELECT DISTINCT ?actor ?actorLabel ?birthDate WHERE
+{
+  ?actor wdt:P31 wd:Q5 . 
+  ?year wdt:P31 wd:Q577 . 
+  ?band wdt:P31 wd:Q215380 .
+  ?actor wdt:P106 wd:Q33999 ; 
+         wdt:P106 wd:Q639669 ; 
+         wdt:P569 ?birthDate ; 
+         p:P361 [
+      ps:P361 ?band ; 
+      pq:P580 ?startTime ; 
+      pq:P582 ?endTime ] .  
+  FILTER (?startTime >= "1960-01-01"^^xsd:dateTime) 
+  FILTER (?startTime < "2000-01-01"^^xsd:dateTime)
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+ }
+LIMIT 10 

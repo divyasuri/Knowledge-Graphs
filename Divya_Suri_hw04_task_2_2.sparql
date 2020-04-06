@@ -1,0 +1,23 @@
+SELECT DISTINCT ?film ?filmName (COUNT(?cast_member) as ?castmembers) WHERE 
+{ 
+  ?film wdt:P31 wd:Q11424; 
+        wdt:P161 ?cast_member ; 
+        rdfs:label ?filmName .
+        FILTER( LANG(?filmName)="en" )
+   {
+SELECT ?cast_member WHERE
+{
+  ?cast_member wdt:P31 wd:Q5 .
+  ?cast_member wdt:P106 wd:Q33999 ; 
+               p:P1411 ?awardStat . 
+  ?awardStat pq:P805 ?award ; 
+             ps:P1411 wd:Q103916. 
+  ?award wdt:P585 ?time. 
+  FILTER(?time > "2000-12-31"^^xsd:dateTime)
+ }
+GROUP BY ?cast_member
+}
+  }
+GROUP BY ?film ?filmName
+HAVING (COUNT(?cast_member) >= 4)
+LIMIT 10 

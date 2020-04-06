@@ -1,0 +1,15 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX lmdb: <http://data.linkedmdb.org/movie/>
+
+SELECT DISTINCT ?URI ?actorName WHERE 
+{
+  ?URI rdf:type lmdb:actor ; 
+     lmdb:actor_name ?actorName . 
+  ?r rdf:type lmdb:producer ; 
+     lmdb:producer_name ?actorName . 
+  FILTER NOT EXISTS {
+    ?t rdf:type lmdb:director ; 
+       lmdb:director_name ?actorName . 
+  }
+}
+LIMIT 10 

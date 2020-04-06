@@ -1,0 +1,20 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX lmdb: <http://data.linkedmdb.org/movie/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?actorName ?birthdate WHERE 
+{ 
+  ?s rdf:type lmdb:actor ; 
+     lmdb:actor_name ?actorName ; 
+     owl:sameAs ?dbpediaLink .
+    FILTER(regex(str(?dbpediaLink), "dbpedia", "i"))
+   SERVICE <http://dbpedia.org/sparql>  {
+    ?dbpediaLink dbo:birthDate ?birthdate . 
+    ?dbpediaLink foaf:gender "female"@en . 
+}
+    FILTER (?birthdate > xsd:date("1975-12-31"))
+  }
+LIMIT 10 
